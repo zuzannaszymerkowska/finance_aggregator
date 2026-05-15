@@ -13,6 +13,7 @@ BASE_DIR = Path(__file__).resolve().parent.parent
 SECRET_KEY = os.getenv('SECRET_KEY', 'django-insecure-!^p@f_&0vdt-bo8r0=1)db=8ws-xp63hx7x+_zp4p9x5s^gcj=')
 
 # SECURITY WARNING: don't run with debug turned on in production!
+# Na Renderze ustawimy tę zmienną na False w panelu
 DEBUG = os.getenv('DEBUG', 'True') == 'True'
 
 # ALLOWED_HOSTS ustawiamy na '*' dla ułatwienia w Dockerze i na Render
@@ -31,7 +32,7 @@ INSTALLED_APPS = [
 
 MIDDLEWARE = [
     'django.middleware.security.SecurityMiddleware',
-    'whitenoise.middleware.WhiteNoiseMiddleware', # Obsługa plików statycznych na Render
+    'whitenoise.middleware.WhiteNoiseMiddleware', # Obsługa plików statycznych
     'django.contrib.sessions.middleware.SessionMiddleware',
     'django.middleware.common.CommonMiddleware',
     'django.middleware.csrf.CsrfViewMiddleware',
@@ -60,13 +61,12 @@ TEMPLATES = [
 
 WSGI_APPLICATION = 'core.wsgi.application'
 
-# Database
-# Jeśli zmienna DATABASE_URL istnieje (Docker/Render/CI), używamy jej. 
-# Jeśli nie, używamy sqlite (bezpiecznik).
+# Database - Powrót do SQLite dla wersji darmowej bez karty
 DATABASES = {
-    'default': dj_database_url.config(
-        default=os.getenv('DATABASE_URL', f"sqlite:///{BASE_DIR / 'db.sqlite3'}")
-    )
+    'default': {
+        'ENGINE': 'django.db.backends.sqlite3',
+        'NAME': BASE_DIR / 'db.sqlite3',
+    }
 }
 
 # Password validation
@@ -90,13 +90,11 @@ STATIC_ROOT = os.path.join(BASE_DIR, 'staticfiles')
 # Default primary key field type
 DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
 
-# Konfiguracja Redis (z poprawką dla CI/CD)
+# CACHE - Zmiana na LocMemCache (nie wymaga serwera Redis, działa w pamięci RAM aplikacji)
+# Pozwoli to na zaliczenie "Zadania Inżynierskiego" (caching) bez dodatkowych kosztów
 CACHES = {
     'default': {
-        'BACKEND': 'django_redis.cache.RedisCache',
-        'LOCATION': os.getenv('REDIS_URL', 'redis://redis:6379/1'),
-        'OPTIONS': {
-            'CLIENT_CLASS': 'django_redis.client.DefaultClient',
-        }
+        'BACKEND': 'django.core.cache.backends.locmem.LocMemCache',
+        'LOCATION': 'unique-snowflake',
     }
 }
