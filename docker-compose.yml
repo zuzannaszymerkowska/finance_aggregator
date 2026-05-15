@@ -10,6 +10,11 @@ services:
       - POSTGRES_USER=postgres
       - POSTGRES_PASSWORD=postgres
 
+  redis:
+    image: redis:7-alpine
+    ports:
+      - "6379:6379"
+
   web:
     build: .
     command: python manage.py runserver 0.0.0.0:8000
@@ -21,8 +26,10 @@ services:
       - DEBUG=True
       - SECRET_KEY=dev-secret-key
       - DATABASE_URL=postgres://postgres:postgres@db:5432/finance_db
+      - REDIS_URL=redis://redis:6379/0
     depends_on:
       - db
+      - redis
 
 volumes:
   postgres_data:
