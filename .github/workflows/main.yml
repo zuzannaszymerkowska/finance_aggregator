@@ -32,10 +32,10 @@ jobs:
       - name: Run Tests
         env:
           DATABASE_URL: sqlite:///db.sqlite3
-          # To jest kluczowa poprawka - w CI Redis jest na localhost
           REDIS_URL: redis://localhost:6379/1
           SECRET_KEY: test-key-123
           DEBUG: True
         run: |
           python manage.py migrate
           python manage.py test
+          
