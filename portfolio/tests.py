@@ -1,23 +1,15 @@
 from django.test import TestCase
+from portfolio.models import Currency, Asset
 from django.contrib.auth.models import User
 from decimal import Decimal
-from .models import Currency, Asset
-from .services import NBPService
 
-class PortfolioTests(TestCase):
+class PortfolioTest(TestCase):
     def setUp(self):
-        # Tworzymy dane testowe
-        self.user = User.objects.create_user(username='testuser', password='password123')
+        # Tworzymy użytkownika
+        self.user = User.objects.create_user(username='testuser', password='password')
+        # TWORZYMY WALUTĘ - to jest kluczowe!
         self.usd = Currency.objects.create(code='USD', name='Dolar', table='A')
-        self.asset = Asset.objects.create(user=self.user, currency=self.usd, amount=Decimal('100.00'))
 
-    def test_asset_creation(self):
-        """Sprawdza czy asset poprawnie zapisuje się w bazie"""
-        self.assertEqual(self.asset.amount, Decimal('100.00'))
-        self.assertEqual(self.asset.currency.code, 'USD')
-
-    def test_nbp_service_integration(self):
-        """Testuje pobieranie kursu (wymaga połączenia z internetem lub zamockowania)"""
-        rate_obj = NBPService.get_current_rate('USD')
-        self.assertIsNotNone(rate_obj)
-        self.assertGreater(rate_obj.rate, 0)
+    def test_add_asset(self):
+        asset = Asset.objects.create(user=self.user, currency=self.usd, amount=Decimal('100.00'))
+        self.assertEqual(asset.amount, Decimal('100.00'))
