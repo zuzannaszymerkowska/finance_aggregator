@@ -30,4 +30,8 @@ jobs:
           SECRET_KEY: test-key
           DEBUG: True
         run: |
+<<<<<<< HEAD
           python manage.py test
+=======
+          python manage.py test
+>>>>>>> 62ec5207cb8c49acef79511debb2d8d8a7f459f8
