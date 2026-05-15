@@ -1,0 +1,1 @@
+# Agregator Danych Finansowych
