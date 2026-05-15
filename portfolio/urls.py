@@ -1,5 +1,5 @@
 from django.urls import path
-from . import views
+from . import views  # To importuje cały moduł views
 
 urlpatterns = [
     path('', views.portfolio_list, name='portfolio_list'),
