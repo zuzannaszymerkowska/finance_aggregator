@@ -1,23 +1,33 @@
 from django.shortcuts import render, redirect, get_object_or_404
 from django.contrib.auth.decorators import login_required
 from .models import Asset
-from .forms import AssetForm  # Upewnij się, że masz ten import!
+from .forms import AssetForm  
 from .services import NBPService
-from decimal import Decimal
+from decimal import Decimal, ROUND_HALF_UP
 
 @login_required
 def portfolio_list(request):
     assets = Asset.objects.filter(user=request.user)
     total_value_pln = Decimal('0.00')
+    
+    twoplaces = Decimal('0.01')
+    
     for asset in assets:
         rate_obj = NBPService.get_current_rate(asset.currency.code)
         if rate_obj:
-            asset.current_rate = Decimal(str(rate_obj.rate))
-            asset.value_pln = asset.amount * asset.current_rate
+            asset.current_rate = Decimal(str(rate_obj.rate)).quantize(twoplaces, rounding=ROUND_HALF_UP)
+            
+            asset.value_pln = (asset.amount * asset.current_rate).quantize(twoplaces, rounding=ROUND_HALF_UP)
+            
             total_value_pln += asset.value_pln
-    return render(request, 'portfolio/list.html', {'assets': assets, 'total_value_pln': total_value_pln})
+            
+    total_value_pln = total_value_pln.quantize(twoplaces, rounding=ROUND_HALF_UP)
+    
+    return render(request, 'portfolio/list.html', {
+        'assets': assets, 
+        'total_value_pln': total_value_pln
+    })
 
-# TEJ FUNKCJI PRAWDOPODOBNIE BRAKUJE LUB MA BŁĄD W NAZWIE:
 @login_required
 def add_asset(request):
     if request.method == 'POST':
