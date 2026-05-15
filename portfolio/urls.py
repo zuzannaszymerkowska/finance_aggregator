@@ -1,6 +1,8 @@
 from django.urls import path
-from .views import portfolio_list
+from . import views
 
 urlpatterns = [
-    path('', portfolio_list, name='portfolio_list'),
+    path('', views.portfolio_list, name='portfolio_list'),
+    path('add/', views.add_asset, name='add_asset'),
+    path('delete/<int:pk>/', views.delete_asset, name='delete_asset'),
 ]
