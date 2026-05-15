@@ -1,5 +1,4 @@
 services:
-  # Aplikacja Django
   - type: web
     name: finance-aggregator
     runtime: python
@@ -20,7 +19,6 @@ services:
       - key: DEBUG
         value: "False"
 
-  # Redis jako usługa typu keyvalue z listą IP
   - type: keyvalue
     name: finance-cache
     plan: free

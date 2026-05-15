@@ -5,7 +5,6 @@ from .models import Currency, Asset
 class PortfolioTest(TestCase):
     def setUp(self):
         self.user = User.objects.create_user(username='testuser', password='password123')
-        # Usuwamy 'table', bo model go nie posiada (lub nazywa się inaczej)
         self.usd = Currency.objects.create(code='USD', name='Dolar') 
 
     def test_add_asset(self):

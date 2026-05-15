@@ -4,8 +4,8 @@ from django.contrib.auth.models import User
 class Currency(models.Model):
     code = models.CharField(max_length=3, unique=True)
     name = models.CharField(max_length=50)
-    symbol = models.CharField(max_length=10, blank=True, null=True) # dodane
-    table = models.CharField(max_length=1, default='A')             # dodane
+    symbol = models.CharField(max_length=10, blank=True, null=True) 
+    table = models.CharField(max_length=1, default='A')            
 
     def __str__(self):
         return f"{self.code} - {self.name}"
