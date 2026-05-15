@@ -26,8 +26,10 @@ jobs:
           
       - name: Run Tests
         env:
+          # Używamy sqlite do testów w CI, żeby nie stawiać ciężkiego Postgresa
           DATABASE_URL: sqlite:///db.sqlite3
           SECRET_KEY: test-key-123
           DEBUG: True
         run: |
+          python manage.py migrate
           python manage.py test
