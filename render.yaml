@@ -20,10 +20,13 @@ services:
       - key: DEBUG
         value: "False"
 
-  # Redis jako usługa typu keyvalue
+  # Redis jako usługa typu keyvalue z listą IP
   - type: keyvalue
     name: finance-cache
     plan: free
+    ipAllowList:
+      - source: 0.0.0.0/0
+        description: Allow all
 
 databases:
   - name: finance-db
