@@ -1,0 +1,20 @@
+[
+  {
+    "model": "portfolio.currency",
+    "fields": {
+      "code": "USD",
+      "name": "Dolar amerykański",
+      "symbol": "$",
+      "table": "A"
+    }
+  },
+  {
+    "model": "portfolio.currency",
+    "fields": {
+      "code": "EUR",
+      "name": "Euro",
+      "symbol": "€",
+      "table": "A"
+    }
+  }
+]
