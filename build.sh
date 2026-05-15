@@ -31,4 +31,4 @@ for data in currencies:
         print(f"Dodano walute: {data['code']}")
 END
 
-print("Build script finished successfully!")
+echo "Build script finished successfully"
